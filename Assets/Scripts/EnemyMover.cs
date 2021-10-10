@@ -22,12 +22,12 @@ public class EnemyMover : MonoBehaviour
 
     void OnEnable()
     {
-        FindPath();
+        RecalculatePath();
         ReturnToStart();
         StartCoroutine(FollowPath());
     }
 
-    void FindPath()
+    void RecalculatePath()
     {
         path.Clear();
         path = _pathFinder.GetNewPath();
