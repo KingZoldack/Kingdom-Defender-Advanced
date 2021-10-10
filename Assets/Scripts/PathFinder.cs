@@ -6,7 +6,10 @@ using UnityEngine;
 public class PathFinder : MonoBehaviour
 {
     [SerializeField] Vector2Int _startCoordinates;
+    public Vector2Int StartCoordinates { get { return _startCoordinates; } }
+
     [SerializeField] Vector2Int _destinationCoordinates;
+    public Vector2Int DestinationCoordinates { get { return _destinationCoordinates; } }
 
     Node _startNode;
     Node _destinationNode;
@@ -25,6 +28,8 @@ public class PathFinder : MonoBehaviour
         if (_gridManager != null)
         {
             _grid = _gridManager._Grid;
+            _startNode = _grid[_startCoordinates];
+            _destinationNode = _grid[_destinationCoordinates];
         }
     }
 
@@ -32,9 +37,6 @@ public class PathFinder : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _startNode = _gridManager._Grid[_startCoordinates];
-        _destinationNode = _gridManager._Grid[_destinationCoordinates];
-
         GetNewPath();
     }
 
@@ -72,6 +74,9 @@ public class PathFinder : MonoBehaviour
 
     void BreadthFirstSearch()
     {
+        _startNode.isWalkable = true;
+        _destinationNode.isWalkable = true;
+
         _frontier.Clear();
         _reached.Clear();
 
