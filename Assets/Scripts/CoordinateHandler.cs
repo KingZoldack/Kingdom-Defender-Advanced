@@ -8,19 +8,21 @@ using System;
 [RequireComponent(typeof(TextMeshPro))]
 public class CoordinateHandler : MonoBehaviour
 {
-    [SerializeField] Color _defaultColor = Color.blue;
-    [SerializeField] Color _blockedColor = Color.grey;
+    [SerializeField] Color _defaultColor = Color.white;
+    [SerializeField] Color _blockedColor = Color.red;
+    [SerializeField] Color _exploredColor = Color.black;
+    [SerializeField] Color _pathColor = Color.green;
 
-    Waypoint waypoint;
     TextMeshPro label;
     Vector2Int coordinates = new Vector2Int();
+    GridManager _grinManager;
 
     private void Awake()
     {
+        _grinManager = FindObjectOfType<GridManager>();
         label = GetComponent<TextMeshPro>();
         label.enabled = false;
 
-        waypoint = GetComponentInParent<Waypoint>();
         DisplayCoordinates();
     }
 
@@ -48,14 +50,30 @@ public class CoordinateHandler : MonoBehaviour
 
     private void SetLabelColor()
     {
-        if (waypoint.IsPlaceable)
+        if(_grinManager == null) { return; }
+
+        Node node = _grinManager.GetNode(coordinates);
+
+        if(node == null) { return; }
+
+        if (!node.isWalkable)
         {
-            label.color = _defaultColor;
+            label.color = _blockedColor;
+        }
+
+        else if (node.isPath)
+        {
+            label.color = _pathColor;
+        }
+
+        else if (node.isExplored)
+        {
+            label.color = _exploredColor;
         }
 
         else
         {
-            label.color = _blockedColor;
+            label.color = _defaultColor;
         }
     }
 
